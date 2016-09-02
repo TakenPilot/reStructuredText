@@ -25,7 +25,19 @@ const dotDotLineTypes = [
   ],
   adornmentLineTypes = [
     {
-      when: '- ',
+      when: (lines, index) => {
+        console.log('bullet check', lines[index], lines[index].length);
+
+        if (lines[index].length < 3) {
+          return false;
+        }
+
+        const line = lines[index].trim();
+
+        console.log('bullet', line, whitespace.isBullet(line[0]), whitespace.isWhitespace(line[1]));
+
+        return whitespace.isBullet(line[0]) && whitespace.isWhitespace(line[1]);
+      },
       then: 'bulletList'
     },
     {
@@ -47,7 +59,7 @@ const dotDotLineTypes = [
       fn: (lines, index) => rules.first(dotDotLineTypes, lines, index)
     },
     {
-      when: (lines, index) => whitespace.isAdornment(lines[index][0]),
+      when: (lines, index) => whitespace.isAdornment(lines[index].trim()[0]),
       then: (lines, index) => rules.first(adornmentLineTypes, lines, index)
     }
   ],
@@ -84,8 +96,6 @@ const dotDotLineTypes = [
         }
 
         const line = lines[sections[index].start];
-
-        console.log('transition', line, whitespace.repeatsFor(line, 0, line.length), line.length >= 4);
 
         return whitespace.repeatsFor(line, 0, line.length) && line.length >= 4;
       },

@@ -5,6 +5,21 @@ import document from '../src/document';
 import fs from 'fs';
 
 vows.describe(__filename).addBatch({
+  'bullets': {
+    topic: function () {
+      fs.readFile(path.join(__dirname, 'bullets.txt'), {encoding: 'utf8'}, this.callback);
+    },
+
+    'we get bullet': function (topic) {
+      const result = document.getSections(topic.split('\n'));
+
+      assert.deepEqual(result, [
+        {start: 0, end: 0, length: 1, indent: 0, type: 'bulletList'},
+        {start: 2, end: 2, length: 1, indent: 0, type: 'bulletList'},
+        {start: 4, end: 4, length: 1, indent: 2, type: 'bulletList'}
+      ]);
+    }
+  },
   'paragraphs': {
     topic: function () {
       fs.readFile(path.join(__dirname, 'paragraphs.txt'), {encoding: 'utf8'}, this.callback);

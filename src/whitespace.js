@@ -1,10 +1,19 @@
 const adornmentCharacters = [
-  '!', '"', '#', '$', '%', '&', '\'', '(', ')', '*', '+', ',', '-', '.', '/', ':', ';', '<',
-  '=', '>', '?', '@', '[', '\\', ']', '^', '_', '`', '{', '|', '}', '~'
-];
+    '!', '"', '#', '$', '%', '&', '\'', '(', ')', '*', '+', ',', '-', '.', '/', ':', ';', '<',
+    '=', '>', '?', '@', '[', '\\', ']', '^', '_', '`', '{', '|', '}', '~'
+  ],
+  bulletCharacters = ['*', '+', '-', '•', '‣', '⁃'];
 
 function isAdornment(char) {
   return adornmentCharacters.indexOf(char) > -1;
+}
+
+function isBullet(char) {
+  return bulletCharacters.indexOf(char) > -1;
+}
+
+function isWhitespace(char) {
+  return char === ' ' || char === '\t';
 }
 
 function countLeadingSpaces(str) {
@@ -38,6 +47,8 @@ function repeatsFor(str, start, len) {
 
 export default {
   isAdornment,
+  isBullet,
+  isWhitespace,
   countLeadingSpaces,
   trimRight,
   repeatsFor
