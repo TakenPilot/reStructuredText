@@ -30,7 +30,11 @@ vows.describe(__filename).addBatch({
 
       assert.deepEqual(result, [
         {start: 0, end: 1, length: 2, indent: 0, type: 'title'},
-        {start: 3, end: 3, length: 1, indent: 0, type: 'paragraph'}
+        {start: 3, end: 3, length: 1, indent: 0, type: 'paragraph'},
+        {start: 5, end: 7, length: 3, indent: 0, type: 'title'},
+        {start: 9, end: 9, length: 1, indent: 0, type: 'paragraph'},
+        {start: 11, end: 13, length: 3, indent: 0, type: 'title'},
+        {start: 15, end: 15, length: 1, indent: 0, type: 'paragraph'}
       ]);
     }
   }

@@ -2,3 +2,15 @@ text
 ----
 
 some words
+
+----
+text
+----
+
+some other words
+
+-----
+text
+-----
+
+some words more
