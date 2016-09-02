@@ -19,11 +19,11 @@ function countLeadingSpaces(str) {
 function trimRight(str) {
   let end = str.length - 1;
 
-  while (end > 0 && str.charCodeAt(end) < 33) {
+  while (end > 0 && str[end] === ' ' || str[end] === '\t') {
     --end;
   }
 
-  return str.substr(0, end);
+  return str.substr(0, end + 1);
 }
 
 function repeatsFor(str, start, len) {

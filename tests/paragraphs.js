@@ -20,9 +20,28 @@ vows.describe(__filename).addBatch({
       ]);
     }
   },
-  'example1': {
+  'transitions': {
     topic: function () {
-      fs.readFile(path.join(__dirname, 'example1.txt'), {encoding: 'utf8'}, this.callback);
+      fs.readFile(path.join(__dirname, 'transitions.txt'), {encoding: 'utf8'}, this.callback);
+    },
+
+    'we get transition': function (topic) {
+      const result = document.getSections(topic.split('\n'));
+
+      assert.deepEqual(result, [
+        {start: 0, end: 0, length: 1, indent: 0, type: 'paragraph'},
+        {start: 2, end: 2, length: 1, indent: 0, type: 'transition'},
+        {start: 4, end: 4, length: 1, indent: 0, type: 'paragraph'},
+        {start: 6, end: 6, length: 1, indent: 0, type: 'paragraph'},
+        {start: 8, end: 8, length: 1, indent: 0, type: 'paragraph'},
+        {start: 10, end: 10, length: 1, indent: 0, type: 'transition'},
+        {start: 12, end: 12, length: 1, indent: 0, type: 'paragraph'}
+      ]);
+    }
+  },
+  'titles': {
+    topic: function () {
+      fs.readFile(path.join(__dirname, 'titles.txt'), {encoding: 'utf8'}, this.callback);
     },
 
     'we get title': function (topic) {

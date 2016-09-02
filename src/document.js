@@ -23,6 +23,7 @@ function getSections(lines) {
   while (index < lines.length) {
     console.log('document', 'lines[index]', lines[index]);
     lines[index] = whitespace.trimRight(lines[index]);
+    console.log('document', 'lines[index]', 'afterTrim', lines[index]);
     const line = lines[index],
       len = line.length;
 

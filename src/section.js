@@ -48,7 +48,7 @@ const dotDotLineTypes = [
     },
     {
       when: (lines, index) => whitespace.isAdornment(lines[index][0]),
-      then: (lines, index) => rules.first(adornmentLineTypes)
+      then: (lines, index) => rules.first(adornmentLineTypes, lines, index)
     }
   ],
   sectionTypes = [
@@ -78,8 +78,18 @@ const dotDotLineTypes = [
       then: 'title'
     },
     {
-      when: {},
-      then: 'literalBlock'
+      when: (sections, index, lines) => {
+        if (sections[index].length !== 1) {
+          return false;
+        }
+
+        const line = lines[sections[index].start];
+
+        console.log('transition', line, whitespace.repeatsFor(line, 0, line.length), line.length >= 4);
+
+        return whitespace.repeatsFor(line, 0, line.length) && line.length >= 4;
+      },
+      then: 'transition'
     },
     {
       when: {},
