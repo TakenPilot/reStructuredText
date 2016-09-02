@@ -20,6 +20,23 @@ vows.describe(__filename).addBatch({
       ]);
     }
   },
+  'comments': {
+    topic: function () {
+      fs.readFile(path.join(__dirname, 'comments.txt'), {encoding: 'utf8'}, this.callback);
+    },
+
+    'we get comment': function (topic) {
+      const result = document.getSections(topic.split('\n'));
+
+      assert.deepEqual(result, [
+        {start: 0, end: 0, length: 1, indent: 0, type: 'comments'},
+        {start: 2, end: 3, length: 2, indent: 0, type: 'comments'},
+        {start: 5, end: 6, length: 2, indent: 0, type: 'comments'},
+        {start: 8, end: 9, length: 2, indent: 0, type: 'comments'},
+        {start: 11, end: 12, length: 2, indent: 0, type: 'comments'}
+      ]);
+    }
+  },
   'paragraphs': {
     topic: function () {
       fs.readFile(path.join(__dirname, 'paragraphs.txt'), {encoding: 'utf8'}, this.callback);

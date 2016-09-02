@@ -26,15 +26,11 @@ const dotDotLineTypes = [
   adornmentLineTypes = [
     {
       when: (lines, index) => {
-        console.log('bullet check', lines[index], lines[index].length);
-
         if (lines[index].length < 3) {
           return false;
         }
 
         const line = lines[index].trim();
-
-        console.log('bullet', line, whitespace.isBullet(line[0]), whitespace.isWhitespace(line[1]));
 
         return whitespace.isBullet(line[0]) && whitespace.isWhitespace(line[1]);
       },
@@ -55,8 +51,17 @@ const dotDotLineTypes = [
   ],
   twoTokenLineTypes = [
     {
-      when: '.. ',
-      fn: (lines, index) => rules.first(dotDotLineTypes, lines, index)
+      when: (lines, index) => {
+        const line = lines[index],
+          isDotDot = line.substr(0, 2) === '..';
+
+        const result = isDotDot && (line.length === 2 || whitespace.isWhitespace(line[2]));
+
+        console.log('dotdot', line, {result});
+
+        return result;
+      },
+      then: (lines, index) => rules.first(dotDotLineTypes, lines, index)
     },
     {
       when: (lines, index) => whitespace.isAdornment(lines[index].trim()[0]),

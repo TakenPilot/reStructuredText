@@ -1,0 +1,9 @@
+.. image:: mylogo.jpeg
+
+.. figure:: larch.png
+
+   The larch.
+
+.. note:: This is a paragraph
+
+   - Here is a bullet list.
