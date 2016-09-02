@@ -53,6 +53,31 @@ const dotDotLineTypes = [
   ],
   sectionTypes = [
     {
+      when: (sections, index, lines) => {
+        const section = sections[index];
+
+        if (section.length === 2) {
+          const titleLine = lines[section.start],
+            lastLine = lines[section.end];
+
+          return whitespace.isAdornment(lastLine[0]) &&
+            titleLine.length === lastLine.length &&
+            whitespace.repeatsFor(lastLine, 0, lastLine.length);
+        } else if (section.length === 3) {
+          const firstLine = lines[section.start],
+            titleLine = lines[section.end - 1],
+            lastLine = lines[section.end];
+
+          return whitespace.isAdornment(lastLine[0]) &&
+            firstLine.length === lastLine.length &&
+            titleLine.length <= lastLine.length &&
+            whitespace.repeatsFor(firstLine, 0, firstLine.length) &&
+            whitespace.repeatsFor(lastLine, 0, lastLine.length);
+        }
+      },
+      then: 'title'
+    },
+    {
       when: {},
       then: 'literalBlock'
     },
@@ -78,8 +103,8 @@ function getTypeByLine(lines, index) {
   return rules.first(twoTokenLineTypes, lines, index);
 }
 
-function getTypeBySection(sections, index) {
-  return rules.first(sectionTypes, sections, index);
+function getTypeBySection(sections, index, lines) {
+  return rules.first(sectionTypes, sections, index, lines);
 }
 
 export default {

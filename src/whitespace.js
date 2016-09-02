@@ -26,8 +26,19 @@ function trimRight(str) {
   return str.substr(0, end);
 }
 
+function repeatsFor(str, start, len) {
+  for (let i = start; i < start + len; i++) {
+    if (str[i] !== str[start]) {
+      return false;
+    }
+  }
+
+  return true;
+}
+
 export default {
   isAdornment,
   countLeadingSpaces,
-  trimRight
+  trimRight,
+  repeatsFor
 }

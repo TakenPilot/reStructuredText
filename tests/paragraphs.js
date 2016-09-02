@@ -10,13 +10,27 @@ vows.describe(__filename).addBatch({
       fs.readFile(path.join(__dirname, 'paragraphs.txt'), {encoding: 'utf8'}, this.callback);
     },
 
-    'we get Infinity': function (topic) {
+    'we get three paragraphs': function (topic) {
       const result = document.getSections(topic.split('\n'));
 
       assert.deepEqual(result, [
-        {start: 0, end: 5, indent: 0},
-        {start: 6, end: 12, indent: 0},
-        {start: 13, end: 20, indent: 0}
+        {start: 0, end: 4, length: 5, indent: 0, type: 'paragraph'},
+        {start: 6, end: 11, length: 6, indent: 0, type: 'paragraph'},
+        {start: 13, end: 19, length: 7, indent: 0, type: 'paragraph'}
+      ]);
+    }
+  },
+  'example1': {
+    topic: function () {
+      fs.readFile(path.join(__dirname, 'example1.txt'), {encoding: 'utf8'}, this.callback);
+    },
+
+    'we get title': function (topic) {
+      const result = document.getSections(topic.split('\n'));
+
+      assert.deepEqual(result, [
+        {start: 0, end: 1, length: 2, indent: 0, type: 'title'},
+        {start: 3, end: 3, length: 1, indent: 0, type: 'paragraph'}
       ]);
     }
   }

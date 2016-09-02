@@ -1,7 +1,19 @@
+import _ from 'lodash';
 import whitespace from './whitespace';
+import sectionService from './section'
+
+function applySectionTypes(sections, lines) {
+  for (let i = 0; i < sections.length; i++) {
+    const type = sectionService.getTypeByLine(lines, sections[i].start) ||
+      sectionService.getTypeBySection(sections, i, lines);
+
+    if (type) {
+      sections[i].type = type;
+    }
+  }
+}
 
 function getSections(lines) {
-  console.log('document', 'lines', lines);
   // divide up document into sections based on blank lines
   const sections = [];
   let index = 0,
@@ -19,7 +31,8 @@ function getSections(lines) {
         // it's the end of a section!
         sections.push({
           start: lastBlankLineIndex + 1,
-          end: index,
+          end: index - 1,
+          length: index - lastBlankLineIndex - 1,
           indent: whitespace.countLeadingSpaces(lines[lastBlankLineIndex + 1])
         });
       }
@@ -29,6 +42,8 @@ function getSections(lines) {
     }
     index++;
   }
+
+  applySectionTypes(sections, lines);
 
   return sections;
 }
