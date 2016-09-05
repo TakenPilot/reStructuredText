@@ -1,4 +1,8 @@
+import _ from 'lodash';
 import whitespace from './whitespace';
+import titleService from './title';
+import literalBlockService from './literal-block';
+import transitionService from './transition';
 import rules from 'rulejs';
 
 const dotDotLineTypes = [
@@ -55,11 +59,7 @@ const dotDotLineTypes = [
         const line = lines[index],
           isDotDot = line.substr(0, 2) === '..';
 
-        const result = isDotDot && (line.length === 2 || whitespace.isWhitespace(line[2]));
-
-        console.log('dotdot', line, {result});
-
-        return result;
+        return isDotDot && (line.length === 2 || whitespace.isWhitespace(line[2]));
       },
       then: (lines, index) => rules.first(dotDotLineTypes, lines, index)
     },
@@ -69,59 +69,14 @@ const dotDotLineTypes = [
     }
   ],
   sectionTypes = [
-    {
-      when: (sections, index, lines) => {
-        const section = sections[index];
-
-        if (section.length === 2) {
-          const titleLine = lines[section.start],
-            lastLine = lines[section.end];
-
-          return whitespace.isAdornment(lastLine[0]) &&
-            titleLine.length === lastLine.length &&
-            whitespace.repeatsFor(lastLine, 0, lastLine.length);
-        } else if (section.length === 3) {
-          const firstLine = lines[section.start],
-            titleLine = lines[section.end - 1],
-            lastLine = lines[section.end];
-
-          return whitespace.isAdornment(lastLine[0]) &&
-            firstLine.length === lastLine.length &&
-            titleLine.length <= lastLine.length &&
-            whitespace.repeatsFor(firstLine, 0, firstLine.length) &&
-            whitespace.repeatsFor(lastLine, 0, lastLine.length);
-        }
-      },
-      then: 'title'
-    },
-    {
-      when: (sections, index, lines) => {
-        if (sections[index].length !== 1) {
-          return false;
-        }
-
-        const line = lines[sections[index].start];
-
-        return whitespace.repeatsFor(line, 0, line.length) && line.length >= 4;
-      },
-      then: 'transition'
-    },
-    {
-      when: {},
-      then: 'blockQuote'
-    },
-    {
-      when: {},
-      then: 'gridTable'
-    },
-    {
-      when: {},
-      then: 'simpleTable'
-    },
-    {
-      when: true,
-      then: 'paragraph'
-    }
+    {when: literalBlockService.isContinuedLiteralBlock, then: 'literalBlock'},
+    {when: literalBlockService.isNewLiteralBlock, then: {alter: ['replacePreviousSectionLiteralMarker'], type: 'literalBlock'}},
+    {when: titleService.isTitle, then: 'title'},
+    {when: transitionService.isTransition, then: 'transition'},
+    {when: {}, then: 'blockQuote'},
+    {when: {}, then: 'gridTable'},
+    {when: {}, then: 'simpleTable'},
+    {when: true, then: 'paragraph'}
   ];
 
 function getTypeByLine(lines, index) {
