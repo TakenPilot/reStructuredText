@@ -6,6 +6,7 @@ import literalBlockService from './literal-block';
 import transitionService from './transition';
 import paragraphService from './paragraph';
 import blockService from './block';
+import definitionService from './definition';
 import rules from 'rulejs';
 
 const dotDotLineTypes = [
@@ -72,6 +73,7 @@ const dotDotLineTypes = [
     }
   ],
   sectionTypes = [
+    {when: definitionService.isDefinition, then: definitionService.getDefinition},
     {when: lineBlockService.isLineBlock, then: 'lineBlock'},
     {when: titleService.isTitle, then: 'title'},
     {when: transitionService.isTransition, then: 'transition'},

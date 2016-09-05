@@ -18,7 +18,7 @@ function normalizeLine(lines, index) {
 function applySectionAlterations(sections, lines) {
   const tombstoneList = [];
 
-  for(let a = 0; a < sections.length; a++) {
+  for (let a = 0; a < sections.length; a++) {
     const type = sections[a].type,
       alter = type && type.alter;
 
@@ -28,7 +28,8 @@ function applySectionAlterations(sections, lines) {
           case 'replacePreviousSectionLiteralMarker':
             literalBlockService.replaceSectionLiteralMarker(sections[a - 1], lines, tombstoneList);
             break;
-          default: break;
+          default:
+            break;
         }
       }
 
@@ -45,10 +46,8 @@ function getStructure(lines) {
     normalizeLine(lines, i);
   }
 
-  //get first non-blank line
-  const start = whitespace.getFirstNonBlankLineIndex(lines, 0);
-
-  const block = blockService.getBlock(lines, start);
+  const start = whitespace.getFirstNonBlankLineIndex(lines, 0),
+    block = blockService.getBlock(lines, start);
 
   sectionService.applySectionTypes(block.sections, lines);
 
@@ -58,11 +57,11 @@ function getStructure(lines) {
 function getHTML(structure, lines) {
   const sections = structure.sections,
     types = {
-    paragraph: index => paragraphService.getHTML(sections, index, lines),
-    literalBlock: index => literalBlockService.getHTML(sections, index, lines),
-    title: index => titleService.getHTML(sections, index, lines),
-    transition: index => transitionService.getHTML(sections, index, lines)
-  };
+      paragraph: index => paragraphService.getHTML(sections, index, lines),
+      literalBlock: index => literalBlockService.getHTML(sections, index, lines),
+      title: index => titleService.getHTML(sections, index, lines),
+      transition: index => transitionService.getHTML(sections, index, lines)
+    };
 
   return _.map(sections, (section, index) => {
     return _.isFunction(types[section.type]) ? types[section.type](index) : '';
