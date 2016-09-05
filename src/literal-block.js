@@ -1,4 +1,5 @@
 import _ from 'lodash';
+import escapeHtml from 'escape-html';
 
 const className = 'rst-literal-block';
 
@@ -33,7 +34,7 @@ function replaceSectionLiteralMarker(section, lines, tombstoneList) {
 function getHTML(sections, index, lines) {
   const section  = sections[index],
     // strip indent from all lines
-    content = _.map(_.slice(lines, section.start, section.end + 1), line => line.substr(section.indent));
+    content = escapeHtml(_.map(_.slice(lines, section.start, section.end + 1), line => line.substr(section.indent)).join(''));
 
   return `<p class="${className}">${content}</p>`;
 }

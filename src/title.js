@@ -1,5 +1,6 @@
 import _ from 'lodash';
 import whitespace from './whitespace';
+import escapeHtml from 'escape-html';
 
 const className = 'rst-title';
 
@@ -62,14 +63,10 @@ function getLevels(sections, index, lines) {
     }
   }
 
-  console.log('levels', levels);
-
   return levels;
 }
 
 function getStyleToken(section, lines) {
-  console.log('getStyleToken', section, lines);
-
   const adornmentCharacter = lines[section.end][0];
   let token = adornmentCharacter;
 
@@ -96,7 +93,7 @@ function getHTML(sections, index, lines) {
     }
   }
 
-  content = titles.join(' ');
+  content = escapeHtml(titles.join(' '));
 
   return `<h2 class="${classNameLevel}">${content}</h2>`;
 }

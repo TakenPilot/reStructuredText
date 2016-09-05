@@ -22,6 +22,7 @@
     "mocha": "^3.0.2"
   },
   "dependencies": {
+    "escape-html": "^1.0.3",
     "rulejs": "^0.1.0"
   }
 }
