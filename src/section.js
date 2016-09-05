@@ -1,8 +1,11 @@
 import _ from 'lodash';
 import whitespace from './whitespace';
 import titleService from './title';
+import lineBlockService from './line-block';
 import literalBlockService from './literal-block';
 import transitionService from './transition';
+import paragraphService from './paragraph';
+import blockService from './block';
 import rules from 'rulejs';
 
 const dotDotLineTypes = [
@@ -69,14 +72,13 @@ const dotDotLineTypes = [
     }
   ],
   sectionTypes = [
-    {when: literalBlockService.isContinuedLiteralBlock, then: 'literalBlock'},
-    {when: literalBlockService.isNewLiteralBlock, then: {alter: ['replacePreviousSectionLiteralMarker'], type: 'literalBlock'}},
+    {when: lineBlockService.isLineBlock, then: 'lineBlock'},
     {when: titleService.isTitle, then: 'title'},
     {when: transitionService.isTransition, then: 'transition'},
     {when: {}, then: 'blockQuote'},
     {when: {}, then: 'gridTable'},
     {when: {}, then: 'simpleTable'},
-    {when: true, then: 'paragraph'}
+    {when: true, then: paragraphService.getParagraph}
   ];
 
 function getTypeByLine(lines, index) {
@@ -87,7 +89,21 @@ function getTypeBySection(sections, index, lines) {
   return rules.first(sectionTypes, sections, index, lines);
 }
 
+function applySectionTypes(sections, lines) {
+  for (let i = 0; i < sections.length; i++) {
+    const type = getTypeByLine(lines, sections[i].start) ||
+      getTypeBySection(sections, i, lines);
+
+    if (_.isString(type)) {
+      sections[i].type = type;
+    } else if (_.isPlainObject(type)) {
+      _.assign(sections[i], type);
+    }
+  }
+}
+
 export default {
   getTypeByLine,
-  getTypeBySection
+  getTypeBySection,
+  applySectionTypes
 }

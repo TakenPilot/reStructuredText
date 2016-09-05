@@ -15,14 +15,20 @@ describe('comments', function () {
   });
 
   it('gets comments', function () {
-    const result = document.getSections(topic.split('\n'));
+    const result = document.getStructure(topic.split('\n'));
 
-    assert.deepEqual(result, [
-      {start: 0, end: 0, length: 1, indent: 0, type: 'comments'},
-      {start: 2, end: 3, length: 2, indent: 0, type: 'comments'},
-      {start: 5, end: 6, length: 2, indent: 0, type: 'comments'},
-      {start: 8, end: 9, length: 2, indent: 0, type: 'comments'},
-      {start: 11, end: 12, length: 2, indent: 0, type: 'comments'}
-    ]);
+    assert.deepEqual(result, {
+      sections: [
+        {start: 0, end: 0, length: 1, indent: 0, type: 'comments'},
+        {start: 2, end: 3, length: 2, indent: 0, type: 'comments'},
+        {start: 5, end: 6, length: 2, indent: 0, type: 'comments'},
+        {start: 8, end: 9, length: 2, indent: 0, type: 'comments'},
+        {start: 11, end: 12, length: 2, indent: 0, type: 'comments'}
+      ],
+      start: 0,
+      end: 12,
+      length: 13,
+      indent: 0
+    });
   });
 });

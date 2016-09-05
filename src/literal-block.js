@@ -16,25 +16,25 @@ function isContinuedLiteralBlock(sections, index, lines) {
     (isNewLiteralBlock(sections, index - 1, lines) || isContinuedLiteralBlock(sections, index - 1, lines))
 }
 
-function replaceSectionLiteralMarker(section, lines, tombstoneList) {
-  const lastLine = lines[section.end];
+function replaceSectionLiteralMarker(lines, index) {
+  const line = lines[index];
 
-  if (section.length === 1 && lastLine.length == 2) {
-    //just delete the last section
-    tombstoneList.push(a - 1);
-  } else if (lastLine[lastLine - 3] === ' ') {
+  if (line.length == 2) {
+    //just delete the whole thing
+    lines[index] = '';
+  } else if (line[line.length - 3] === ' ') {
     // if they have whitespace before the colons, remove the colons and whitespace
-    lines[section.end] = lastLine.substr(0, lastLine - 3);
+    lines[index] = line.substr(0, line.length - 3);
   } else {
     // else, leave a single colon
-    lines[section.end] = lastLine.substr(0, lastLine - 1);
+    lines[index] = line.substr(0, line.length - 1);
   }
 }
 
 function getHTML(sections, index, lines) {
   const section  = sections[index],
     // strip indent from all lines
-    content = escapeHtml(_.map(_.slice(lines, section.start, section.end + 1), line => line.substr(section.indent)).join(''));
+    content = escapeHtml(_.map(_.slice(lines, section.start, section.end + 1), line => line.substr(section.indent)).join('\n'));
 
   return `<p class="${className}">${content}</p>`;
 }

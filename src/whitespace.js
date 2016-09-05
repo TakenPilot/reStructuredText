@@ -13,7 +13,7 @@ function isBullet(char) {
 }
 
 function isWhitespace(char) {
-  return char === ' ' || char === '\t';
+  return char !== undefined && (char === ' ' || char === '\t');
 }
 
 function countLeadingSpaces(str) {
@@ -45,11 +45,55 @@ function repeatsFor(str, start, len) {
   return true;
 }
 
+function getFirstNonSpaceIndex(str, start) {
+  start = start || 0;
+
+  for (let i = start; i < str.length; i++) {
+    if (str[i] !== undefined && !isWhitespace(str[i])) {
+      return i;
+    }
+  }
+
+  return -1;
+}
+
+function getFirstNonBlankLineIndex(lines, start, end) {
+  start = start || 0;
+  end = end === undefined ? lines.length : end;
+
+  while (start < end) {
+    if (lines[start].length !== 0) {
+      return start;
+    }
+    start++;
+  }
+
+  return -1;
+}
+
+function getLastLineWithIndentIndex(lines, indent, start, end) {
+  start = start || 0;
+  end = end === undefined ? lines.length : end;
+
+  for (let i = end - 1; i >= start; i--) {
+    const len = lines[i].length;
+
+    if (len > 0 && len >= indent && countLeadingSpaces(lines[i]) === indent) {
+      return i;
+    }
+  }
+
+  return -1;
+}
+
 export default {
   isAdornment,
   isBullet,
   isWhitespace,
   countLeadingSpaces,
+  getFirstNonSpaceIndex,
+  getFirstNonBlankLineIndex,
+  getLastLineWithIndentIndex,
   trimRight,
   repeatsFor
 }

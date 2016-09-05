@@ -15,19 +15,26 @@ describe('paragraphs', function () {
   });
 
   it('gets paragraph sections', function () {
-    const result = document.getSections(topic.split('\n'));
+    const result = document.getStructure(topic.split('\n'));
 
-    assert.deepEqual(result, [
-      {start: 0, end: 4, length: 5, indent: 0, type: 'paragraph'},
-      {start: 6, end: 11, length: 6, indent: 0, type: 'paragraph'},
-      {start: 13, end: 19, length: 7, indent: 0, type: 'paragraph'}
-    ]);
+    assert.deepEqual(result, {
+        sections: [
+          {start: 0, end: 4, length: 5, indent: 0, type: 'paragraph'},
+          {start: 6, end: 11, length: 6, indent: 0, type: 'paragraph'},
+          {start: 13, end: 19, length: 7, indent: 0, type: 'paragraph'}
+        ],
+        start: 0,
+        end: 19,
+        length: 20,
+        indent: 0
+      }
+    );
   });
 
   it('gets HTML', function () {
     const lines = topic.split('\n'),
-      sections = document.getSections(lines),
-      html = document.getHTML(sections, lines);
+      structure = document.getStructure(lines),
+      html = document.getHTML(structure, lines);
 
     // three paragraphs with stuff in them
     assert(html.match(/(<p class="rst-paragraph">.+<\/p>){3}/g), 'expected three paragraphs with stuff in them');

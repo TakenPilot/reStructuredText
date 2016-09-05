@@ -15,14 +15,19 @@ describe('bullets', function () {
   });
 
   it('gets bullet', function () {
-    const result = document.getSections(topic.split('\n'));
+    const result = document.getStructure(topic.split('\n'));
 
-    assert.deepEqual(result, [
-      {start: 0, end: 0, length: 1, indent: 0, type: 'bulletList'},
-      {start: 2, end: 2, length: 1, indent: 0, type: 'bulletList'},
-      {start: 4, end: 6, length: 3, indent: 0, type: 'bulletList'},
-      {start: 8, end: 8, length: 1, indent: 2, type: 'bulletList'},
-      {start: 10, end: 10, length: 1, indent: 0, type: 'bulletList'}
-    ]);
+    assert.deepEqual(result, {
+      sections: [
+        {start: 0, end: 0, length: 1, indent: 0, type: 'bulletList'},
+        {start: 2, end: 2, length: 1, indent: 0, type: 'bulletList'},
+        {start: 4, end: 8, length: 5, indent: 0, type: 'bulletList'},
+        {start: 10, end: 10, length: 1, indent: 0, type: 'bulletList'}
+      ],
+      start: 0,
+      end: 10,
+      length: 11,
+      indent: 0
+    });
   });
 });

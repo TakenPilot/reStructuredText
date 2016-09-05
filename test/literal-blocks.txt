@@ -20,3 +20,7 @@ some words ::
    has spaces
 
 parent again
+
+::
+
+  some literal
